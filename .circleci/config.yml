@@ -47,7 +47,16 @@ workflows:
   django:
     jobs:
       - build
-      - test
-      - integration
+      - test:
+          requires:
+            - build
+      - bundler-audit:
+          requires:
+            - test
+      - integration:
+          requires:
+            - bundler-audit
       - prod:
           type: approval
+          requires:
+            - integration
