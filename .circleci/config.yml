@@ -12,6 +12,18 @@ jobs:
     steps:
       - checkout
       - run: echo "This is a test step"
+      
+  bundler-audit:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+
+      - run: docker run --rm -v $(pwd):/src -w /src hysnsec/bundle-audit check --format json --output bundle-audit-output.json
+
+      - store_artifacts:
+          path: bundle-audit-output.json
+          destination: bundler-audit-artifact
 
   integration:
     docker:
